@@ -1,25 +1,25 @@
-import tkinter as tk  # Importuje kniznicu tkinter a skrati jej nazov na tk.
-from tkinter import messagebox  # Importuje okna so spravami, napriklad upozornenie alebo vysledok.
-import heapq  # Importuje prioritny rad, ktory sa pouziva v Dijkstrovom algoritme.
-# Tento riadok oddeluje importy od nastaveni programu.
-VELKOST_STVORCA = 50  # Nastavi velkost jedneho policka v pixeloch.
-RIADKY = 10  # Nastavi pocet riadkov v mape.
-STLPCE = 10  # Nastavi pocet stlpcov v mape.
-# Tento riadok oddeluje zakladne nastavenia od terenov.
-TERENY = {  # Vytvara slovnik so vsetkymi typmi terenu.
-    "volne": {"cena": 1, "farba": "white"},  # Volne policko ma cenu 1 a bielu farbu.
-    "les": {"cena": 5, "farba": "#228B22"},  # Les ma cenu 5 a zelenu farbu.
-    "voda": {"cena": 10, "farba": "#1E90FF"},  # Voda ma cenu 10 a modru farbu.
-    "ohen": {"cena": 20, "farba": "#FF4500"},  # Ohen ma cenu 20 a oranzovu farbu.
-    "stena": {"cena": float('inf'), "farba": "#404040"},  # Stena ma nekonecnu cenu, preto sa cez nu neda prejst.
-}  # Koniec slovnika terenov.
-# Tento riadok oddeluje data od triedy aplikacie.
-class Aplikacia:  # Vytvara triedu celej grafickej aplikacie.
-    def __init__(self, root):  # Konstruktor sa spusti pri vytvoreni aplikacie.
-        self.root = root  # Ulozi hlavne okno do premennej triedy.
-        self.root.title("Projekt - Najrýchlejšia cesta")  # Nastavi nazov okna programu.
-# Tento riadok opticky oddeluje nazov okna od premennych programu.
-        self.mapa = [[1 for _ in range(STLPCE)] for _ in range(RIADKY)]  # Vytvori 2D mapu, kde ma kazde policko cenu 1.
+import tkinter as tk
+from tkinter import messagebox
+import heapq
+
+VELKOST_STVORCA = 50
+RIADKY = 10
+STLPCE = 10
+
+TERENY = {
+    "volne": {"cena": 1, "farba": "white"},
+    "les": {"cena": 5, "farba": "#228B22"},
+    "voda": {"cena": 10, "farba": "#1E90FF"},
+    "ohen": {"cena": 20, "farba": "#FF4500"},
+    "stena": {"cena": float('inf'), "farba": "#404040"},
+}
+
+class Aplikacia:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Najrýchlejšia cesta")
+
+        self.mapa = [[1 for stlpec in range(STLPCE)]for riadok in range(RIADKY)]
         self.start_bod = None  # Na zaciatku este nie je vybraty bod A.
         self.ciel_bod = None  # Na zaciatku este nie je vybraty bod B.
         self.text_a = None  # Premenna bude drzat text A na mape.
@@ -31,7 +31,7 @@ class Aplikacia:  # Vytvara triedu celej grafickej aplikacie.
         self.canvas = tk.Canvas(root, width=STLPCE*VELKOST_STVORCA, height=RIADKY*VELKOST_STVORCA)  # Vytvori plochu na kreslenie mapy.
         self.canvas.pack(padx=10, pady=10)  # Zobrazi kresliacu plochu v okne s okrajmi.
 # Tento riadok oddeluje canvas od zoznamu stvorcov.
-        self.stvorce = [[None for _ in range(STLPCE)] for _ in range(RIADKY)]  # Vytvori 2D zoznam pre graficke stvorce.
+        self.stvorce = [[None for stlpec in range(STLPCE)] for riadok in range(RIADKY)]  # Vytvori 2D zoznam pre graficke stvorce.
         self.vykresli_mriezku()  # Vykresli celu mriezku na canvas.
 # Tento riadok oddeluje kreslenie mapy od ovladania mysou.
         self.canvas.bind("<B1-Motion>", self.klik_mysou)  # Pri tahaní lavym tlacidlom mysi sa vola metoda klik_mysou.
@@ -120,7 +120,7 @@ class Aplikacia:  # Vytvara triedu celej grafickej aplikacie.
                 break  # Ukonci cyklus, lebo teren uz bol najdeny.
 # Tento riadok oddeluje prefarbovanie od mazania mapy.
     def vymaz_mapu(self):  # Metoda vymaze celu mapu.
-        self.mapa = [[1 for _ in range(STLPCE)] for _ in range(RIADKY)]  # Obnovi mapu tak, aby boli vsetky policka volne.
+        self.mapa = [[1 for stlpec in range(STLPCE)] for riadok in range(RIADKY)]  # Obnovi mapu tak, aby boli vsetky policka volne.
         self.start_bod = None  # Zrusi bod A.
         self.ciel_bod = None  # Zrusi bod B.
 # Tento riadok oddeluje resetovanie dat od mazania textov.
