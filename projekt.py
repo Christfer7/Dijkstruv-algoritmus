@@ -24,6 +24,7 @@ class Aplikacia:
         self.ciel_bod = None
         self.text_a = None 
         self.text_b = None 
+        self.text_ceny = []
         self.vybrany_nastroj = "les"
         
         self.vytvor_menu()
@@ -40,13 +41,13 @@ class Aplikacia:
         frame = tk.Frame(self.root)
         frame.pack(pady=10)
 
-        tk.Button(frame, text="Štart (A)", fg="red", font='bold', command=lambda: self.zmen_nastroj("A")).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Cieľ (B)", fg="blue", font='bold', command=lambda: self.zmen_nastroj("B")).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Les (5)", bg=TERENY["les"]["farba"], command=lambda: self.zmen_nastroj("les")).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Voda (10)", bg=TERENY["voda"]["farba"], command=lambda: self.zmen_nastroj("voda")).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Oheň (20)", bg=TERENY["ohen"]["farba"], command=lambda: self.zmen_nastroj("ohen")).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Stena", bg=TERENY["stena"]["farba"], fg="white", command=lambda: self.zmen_nastroj("stena")).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Guma", command=lambda: self.zmen_nastroj("volne")).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Štart (A)", fg="red", font='bold', command=self.nastroj_a).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Cieľ (B)", fg="blue", font='bold', command=self.nastroj_b).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Les (5)", bg=TERENY["les"]["farba"], command=self.nastroj_les).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Voda (10)", bg=TERENY["voda"]["farba"], command=self.nastroj_voda).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Oheň (20)", bg=TERENY["ohen"]["farba"], command=self.nastroj_ohen).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Stena", bg=TERENY["stena"]["farba"], command=self.nastroj_stena).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Guma", command=self.nastroj_volne).pack(side=tk.LEFT, padx=2)
         
         tk.Button(frame, text="VYMAZAŤ MAPU", bg="#FF9999", command=self.vymaz_mapu).pack(side=tk.LEFT, padx=10)
         tk.Button(frame, text="ŠTART", bg="yellow", width=10, font='bold', command=self.spusti_vypocet).pack(side=tk.LEFT, padx=10)
@@ -61,6 +62,27 @@ class Aplikacia:
 
     def zmen_nastroj(self, nastroj):
         self.vybrany_nastroj = nastroj
+
+    def nastroj_a(self):
+        self.zmen_nastroj("A")
+
+    def nastroj_b(self):
+        self.zmen_nastroj("B")
+
+    def nastroj_les(self):
+        self.zmen_nastroj("les")
+
+    def nastroj_voda(self):
+        self.zmen_nastroj("voda")
+
+    def nastroj_ohen(self):
+        self.zmen_nastroj("ohen")
+
+    def nastroj_stena(self):
+        self.zmen_nastroj("stena")
+
+    def nastroj_volne(self):
+        self.zmen_nastroj("volne")
 
     def klik_mysou(self, event):
         s = event.x // VELKOST_STVORCA
@@ -104,6 +126,9 @@ class Aplikacia:
         
         if self.text_a: self.canvas.delete(self.text_a); self.text_a = None
         if self.text_b: self.canvas.delete(self.text_b); self.text_b = None
+        for text in self.text_ceny:
+            self.canvas.delete(text)
+        self.text_ceny = []
         
         for r in range(RIADKY):
             for s in range(STLPCE):
@@ -140,16 +165,35 @@ class Aplikacia:
         for r in range(RIADKY):
             for s in range(STLPCE):
                 self.canvas.itemconfig(self.stvorce[r][s], outline="lightgray", width=1)
+        for text in self.text_ceny:
+            self.canvas.delete(text)
+        self.text_ceny = []
 
         cesta_mapa, celkova_cena = self.dijkstra(self.start_bod, self.ciel_bod)
 
         if cesta_mapa:
             aktualny = self.ciel_bod
+            cesta = []
             while aktualny in cesta_mapa and aktualny != self.start_bod:
                 predchadzajuci = cesta_mapa[aktualny]
                 if predchadzajuci and predchadzajuci != self.start_bod:
-                    self.canvas.itemconfig(self.stvorce[predchadzajuci[0]][predchadzajuci[1]], outline="yellow", width=4)
+                    cesta.append(predchadzajuci)
                 aktualny = predchadzajuci
+
+            priebezna_cena = 0
+            for r, s in reversed(cesta):
+                priebezna_cena += self.mapa[r][s]
+                self.canvas.itemconfig(self.stvorce[r][s], outline="yellow", width=4)
+                stred_x = s * VELKOST_STVORCA + VELKOST_STVORCA // 2
+                stred_y = r * VELKOST_STVORCA + VELKOST_STVORCA // 2
+                text = self.canvas.create_text(
+                    stred_x,
+                    stred_y,
+                    text=str(priebezna_cena),
+                    font=("Arial", 12, "bold"),
+                    fill="black"
+                )
+                self.text_ceny.append(text)
             messagebox.showinfo("Hotovo", f"Celková cena cesty: {celkova_cena}")
         else:
             messagebox.showerror("Chyba", "Cesta neexistuje!")
