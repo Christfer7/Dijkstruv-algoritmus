@@ -72,22 +72,32 @@ class Aplikacia:
             stred_y = r * VELKOST_STVORCA + VELKOST_STVORCA // 2
 
             if self.vybrany_nastroj == "A":
-                if self.text_a: self.canvas.delete(self.text_a)
-                if self.start_bod: self.prefarbi_stvorec(self.start_bod[0], self.start_bod[1])
+                if self.text_a: 
+                    self.canvas.delete(self.text_a)
+                if self.start_bod: 
+                    self.prefarbi_stvorec(self.start_bod[0], self.start_bod[1])
                 self.start_bod = (r, s)
                 self.canvas.itemconfig(self.stvorce[r][s], fill="#FFCCCC") 
                 self.text_a = self.canvas.create_text(stred_x, stred_y, text="A", font=("Arial", 20, "bold"), fill="red")
                 
             elif self.vybrany_nastroj == "B":
-                if self.text_b: self.canvas.delete(self.text_b)
-                if self.ciel_bod: self.prefarbi_stvorec(self.ciel_bod[0], self.ciel_bod[1])
+                if self.text_b: 
+                    self.canvas.delete(self.text_b)
+                if self.ciel_bod: 
+                    self.prefarbi_stvorec(self.ciel_bod[0], self.ciel_bod[1])
                 self.ciel_bod = (r, s)
                 self.canvas.itemconfig(self.stvorce[r][s], fill="#CCCCFF") 
                 self.text_b = self.canvas.create_text(stred_x, stred_y, text="B", font=("Arial", 20, "bold"), fill="blue")
             else:
-                if (r, s) == self.start_bod: self.start_bod = None; self.canvas.delete(self.text_a); self.text_a = None
-                if (r, s) == self.ciel_bod: self.ciel_bod = None; self.canvas.delete(self.text_b); self.text_b = None
-                
+                if (r, s) == self.start_bod: 
+                    self.start_bod = None
+                    self.canvas.delete(self.text_a)
+                    self.text_a = None
+                if (r, s) == self.ciel_bod: 
+                    self.ciel_bod = None
+                    self.canvas.delete(self.text_b)
+                    self.text_b = None
+
                 self.mapa[r][s] = TERENY[self.vybrany_nastroj]["cena"]
                 self.canvas.itemconfig(self.stvorce[r][s], fill=TERENY[self.vybrany_nastroj]["farba"])
 
@@ -103,8 +113,12 @@ class Aplikacia:
         self.start_bod = None
         self.ciel_bod = None
         
-        if self.text_a: self.canvas.delete(self.text_a); self.text_a = None
-        if self.text_b: self.canvas.delete(self.text_b); self.text_b = None
+        if self.text_a: 
+            self.canvas.delete(self.text_a)
+            self.text_a = None
+        if self.text_b: 
+            self.canvas.delete(self.text_b)
+            self.text_b = None
         for text in self.text_ceny:
             self.canvas.delete(text)
         self.text_ceny = []
@@ -127,7 +141,8 @@ class Aplikacia:
                 nr, ns = r + dr, s + ds
                 if 0 <= nr < RIADKY and 0 <= ns < STLPCE:
                     cena_prechodu = 0 if (nr, ns) == ciel else self.mapa[nr][ns]
-                    if cena_prechodu == float('inf'): continue 
+                    if cena_prechodu == float('inf'):
+                        continue 
 
                     nova_vzdialenost = aktualna_vzdialenost + cena_prechodu
                     if (nr, ns) not in vzdialenosti or nova_vzdialenost < vzdialenosti[(nr, ns)]:
@@ -165,13 +180,7 @@ class Aplikacia:
                 self.canvas.itemconfig(self.stvorce[r][s], outline="yellow", width=4)
                 stred_x = s * VELKOST_STVORCA + VELKOST_STVORCA // 2
                 stred_y = r * VELKOST_STVORCA + VELKOST_STVORCA // 2
-                text = self.canvas.create_text(
-                    stred_x,
-                    stred_y,
-                    text=str(priebezna_cena),
-                    font=("Arial", 12, "bold"),
-                    fill="black"
-                )
+                text = self.canvas.create_text(stred_x, stred_y, text=str(priebezna_cena), font=("Arial", 12, "bold"), fill="black")
                 self.text_ceny.append(text)
             messagebox.showinfo("Hotovo", f"Celková cena cesty: {celkova_cena}")
         else:
