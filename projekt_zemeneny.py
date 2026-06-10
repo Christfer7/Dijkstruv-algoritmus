@@ -41,13 +41,13 @@ class Aplikacia:
         frame = tk.Frame(self.root)
         frame.pack(pady=10)
 
-        tk.Button(frame, text="Štart (A)", fg="red", font='bold', command=self.nastroj_a).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Cieľ (B)", fg="blue", font='bold', command=self.nastroj_b).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Les (5)", bg=TERENY["les"]["farba"], command=self.nastroj_les).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Voda (10)", bg=TERENY["voda"]["farba"], command=self.nastroj_voda).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Oheň (20)", bg=TERENY["ohen"]["farba"], command=self.nastroj_ohen).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Stena", bg=TERENY["stena"]["farba"], command=self.nastroj_stena).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Guma", command=self.nastroj_volne).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Štart (A)", fg="red", font='bold', command=lambda: self.zmen_nastroj("A")).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Cieľ (B)", fg="blue", font='bold', command=lambda: self.zmen_nastroj("B")).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Les (5)", bg=TERENY["les"]["farba"], command=lambda: self.zmen_nastroj("les")).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Voda (10)", bg=TERENY["voda"]["farba"], command=lambda: self.zmen_nastroj("voda")).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Oheň (20)", bg=TERENY["ohen"]["farba"], command=lambda: self.zmen_nastroj("ohen")).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Stena", bg=TERENY["stena"]["farba"], fg="black", command=lambda: self.zmen_nastroj("stena")).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Guma", command=lambda: self.zmen_nastroj("volne")).pack(side=tk.LEFT, padx=2)
         
         tk.Button(frame, text="VYMAZAŤ MAPU", bg="#FF9999", command=self.vymaz_mapu).pack(side=tk.LEFT, padx=10)
         tk.Button(frame, text="ŠTART", bg="yellow", width=10, font='bold', command=self.spusti_vypocet).pack(side=tk.LEFT, padx=10)
@@ -62,27 +62,6 @@ class Aplikacia:
 
     def zmen_nastroj(self, nastroj):
         self.vybrany_nastroj = nastroj
-
-    def nastroj_a(self):
-        self.zmen_nastroj("A")
-
-    def nastroj_b(self):
-        self.zmen_nastroj("B")
-
-    def nastroj_les(self):
-        self.zmen_nastroj("les")
-
-    def nastroj_voda(self):
-        self.zmen_nastroj("voda")
-
-    def nastroj_ohen(self):
-        self.zmen_nastroj("ohen")
-
-    def nastroj_stena(self):
-        self.zmen_nastroj("stena")
-
-    def nastroj_volne(self):
-        self.zmen_nastroj("volne")
 
     def klik_mysou(self, event):
         s = event.x // VELKOST_STVORCA

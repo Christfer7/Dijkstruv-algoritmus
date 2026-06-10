@@ -45,7 +45,7 @@ class Aplikacia:
         tk.Button(frame, text="Les (5)", bg=TERENY["les"]["farba"], command=lambda: self.zmen_nastroj("les")).pack(side=tk.LEFT, padx=2)
         tk.Button(frame, text="Voda (10)", bg=TERENY["voda"]["farba"], command=lambda: self.zmen_nastroj("voda")).pack(side=tk.LEFT, padx=2)
         tk.Button(frame, text="Oheň (20)", bg=TERENY["ohen"]["farba"], command=lambda: self.zmen_nastroj("ohen")).pack(side=tk.LEFT, padx=2)
-        tk.Button(frame, text="Stena", bg=TERENY["stena"]["farba"], fg="white", command=lambda: self.zmen_nastroj("stena")).pack(side=tk.LEFT, padx=2)
+        tk.Button(frame, text="Stena", bg=TERENY["stena"]["farba"], fg="black", command=lambda: self.zmen_nastroj("stena")).pack(side=tk.LEFT, padx=2)
         tk.Button(frame, text="Guma", command=lambda: self.zmen_nastroj("volne")).pack(side=tk.LEFT, padx=2)
         
         tk.Button(frame, text="VYMAZAŤ MAPU", bg="#FF9999", command=self.vymaz_mapu).pack(side=tk.LEFT, padx=10)
